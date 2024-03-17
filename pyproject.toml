@@ -1,0 +1,20 @@
+[project]
+name = "cdx-combine"
+version = "0.1.0"
+description = "CycloneDX merge too that combines several CycloneDX definitions into one, merging them hierarchically."
+authors = [
+    {name = "Philipp A. Baer", email = "git@ph.baer.one"},
+]
+dependencies = [
+    "cyclonedx-python-lib[validation]>=6.4.3",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
