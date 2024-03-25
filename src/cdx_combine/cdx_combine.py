@@ -12,14 +12,14 @@ import logging
 
 class CDX_Combine:
     def run(self, args):
-        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger('cdxc')
 
         name: str = args.name
         version: str = args.version
         ref = name.lower().replace(' ', '_')
         files = args.files
         
-        logging.info(f'Generating SBOM for {name} {version} from {", ".join(files)}...')
+        logger.info(f'Generating SBOM for {name} {version} from {", ".join(files)}...')
 
         boms = []
         for file in files:
@@ -34,7 +34,7 @@ class CDX_Combine:
         for bom in boms:
             bom_component = bom.metadata.component
             bom_ref = bom_component.bom_ref.value
-            logging.info(f'Processing {bom_ref}...')
+            logger.info(f'Processing {bom_ref}...')
 
             new_bom.components.add(bom_component)
             for component in bom.components:
@@ -58,12 +58,12 @@ class CDX_Combine:
         try:
             validation_errors = my_json_validator.validate_str(serialized_json)
             if validation_errors:
-                print('JSON invalid', 'ValidationError:', repr(validation_errors), sep='\n', file=sys.stderr)
+                logger.error(f'JSON invalid:\nValidationError:\n{repr(validation_errors)}')
                 #sys.exit(2)
             #print('JSON valid')
         except MissingOptionalDependencyException as error:
-            print('JSON-validation was skipped due to', error)
+            logger.error(f'JSON-validation was skipped due to {error}')
             
-        with open('cyclonedx.json', 'w') as f:
+        with open(args.output, 'w') as f:
             f.write(serialized_json)
 
