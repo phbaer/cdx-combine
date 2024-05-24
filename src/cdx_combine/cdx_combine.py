@@ -104,7 +104,7 @@ class CDX_Combine:
         for file in files:
             for file in glob.glob(file):
                 logging.info(f'Loading {file}...')
-                with open(file, 'r') as input_file:
+                with open(file, 'r', encoding='utf-8') as input_file:
                     boms.append(Bom.from_json(data=json.loads(input_file.read())))
 
         new_bom = Bom()
